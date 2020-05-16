@@ -1,0 +1,48 @@
+# pyfancyexcel
+
+## pyfancyexcel	- Let you focus on data AND file formats
+
+- Author:		      Philipp Reuter
+- Version:      	1.0.0
+- Generated:    	May 16, 2020
+- Idea based on:	http://docs.pyexcel.org/en/latest/
+
+
+### Introduction
+pyfancyexcel provides one application programming interface to read, manipulate and write data in .xlsx excel formats (Maybe other too, idc). 
+This library makes information processing involving excel files an enjoyable task.
+The original library focuses on data processing using excel files as storage media hence fonts, colors and charts were not and will not be considered.
+> To me, they're much more...
+
+So I went a different way and extract the file as a zip file to memory.
+You can insert data with row and column into a fully formatted Excel and the file keeps all formatting from the original.
+The idea originated from the common usability problem:
+You want to automatically insert data into an Excel, but pandas and pyexcel destroy all the formatting?
+
+
+### How to use
+> `from pyfancyexcel import Excel`
+
+> `excel_file = Excel("Path/to/File")` To create / override with empty Excel, add empty=True
+
+> `excel_file.add_data("Test", 0, 0, 0)` ("data", row_index, column_index, sheet_index)
+
+> `excel_file.save_excel(path="Path/to/new/File.xlsx")` Save the edited Excel as file (Feel free to test different file extensions, .zip works!)
+
+### Extra Features
+> `excel_file.save_as_folder()` # Extracts the Excel file to Folder to see Excel File Contents
+
+> `excel_file.save_as_json()` # Extracts the Excel file to Json to see Excel File Contents, like they are stored in the Excel() class
+
+
+### Planned Features
+###### Important for me
+- [ ] Editing the Format in Python
+- [ ] Clone / Add Sheets
+- [ ] Clone / Add / Create Tables
+- [ ] Insert formulas
+- [ ] Edit Font, Colors & Borders
+
+###### Would be nice
+- [ ] Image support
+- [ ] Plots and Charts
