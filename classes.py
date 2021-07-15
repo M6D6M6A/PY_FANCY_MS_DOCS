@@ -28,7 +28,7 @@ class Excel():
         """
         name                                    | File Name without extension
         empty = False                           | Defines if a new Excel should be generated
-        dir = "Path/were/Excel/is/located/"    | Defines the Path were the Excel is located
+        dir = "Path/were/Excel/is/located/"     | Defines the Path were the Excel is located
         debug = False                           | If true prints all Debug Texts
         """
         self._debug = debug
