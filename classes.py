@@ -1,4 +1,5 @@
 #!/usr/bin/python
+
 # /* Copyright (C) 2020 Philipp Reuter - All Rights Reserved
 #  * You may use, distribute and modify this code under the
 #  * terms of the Creative-Commons license
@@ -9,29 +10,35 @@
 #  */   DE:            http://creativecommons.org/licenses/by-nc-sa/3.0/de/
 
 # Python Libarys
-import sys, os, string, uuid, json, io
-
-_work_dir = os.path.dirname(__file__)
+import sys, os, string, json, io
 
 # Libarys for working with Excel File
 from zipfile import ZipFile, ZIP_DEFLATED
 from lxml import etree
 
+# Determine if Application is a Python Script or a complied .exe and define global _DIR
+if getattr(sys, 'frozen', False):
+    _DIR = os.path.dirname(sys.executable)
+elif __file__:
+    _DIR = os.path.dirname(__file__)
+
 
 class Excel():
-    def __init__(self, path, empty=False, DEBUG=False):
+    def __init__(self, name, dir=None, debug=False, empty=False):
         """
-        path = "Path/were/Excel/is/located/"    | Defines the Path were the Excel is located
+        name                                    | File Name without extension
         empty = False                           | Defines if a new Excel should be generated
-        DEBUG = False                           | If true prints all Debug Texts
+        dir = "Path/were/Excel/is/located/"    | Defines the Path were the Excel is located
+        debug = False                           | If true prints all Debug Texts
         """
-        self._DEBUG = DEBUG
-        self._path = path
+        self._debug = debug
+        self._name = name
+        self._dir = dir or _DIR
 
         if empty:
             self.excel_contend, self.ZIP = self._create_new_empty_excel()
         else:
-            self.excel_contend, self.ZIP = self._load_excel(f"{self._path}")
+            self.excel_contend, self.ZIP = self._load_excel(f"{self._dir}/{self._name}.xlsx")
 
         # Open Workbook Rels
         self.workbook_rels = etree.fromstring(self.excel_contend["xl/_rels/workbook.xml.rels"])
@@ -67,7 +74,7 @@ class Excel():
                 tmp_table_range = tmp_table.attrib["ref"] # ref="A1:J401"
                 self.tables.append({"table": tmp_table, "range": tmp_table_range})                
 
-        if self._DEBUG: print("* Loaded Excel")
+        if self._debug: print("* Loaded Excel")
     
     def save_as_folder(self):
         self._save_excel_memory()
@@ -78,17 +85,15 @@ class Excel():
                     zip_file.writestr(n, v)
 
             # Exctract Excel to Folder
-            tmp_path = '.'.join(self._path.split(".")[:-1])
-            zip_file.extractall(f"{tmp_path}")
+            zip_file.extractall(f"{self._dir}/{self._name}")
 
     def save_as_json(self):
-        tmp_path = '.'.join(self._path.split(".")[:-1])
-        with open(f"{tmp_path}.json", "w") as json_file:
+        with open(f"{self._dir}/{self._name}.json", "w") as json_file:
             tmp_json = {n: v.decode() for n, v in self.excel_contend.items()}
             json.dump(tmp_json, json_file)
 
     def add_data(self, data, row, column, sheet):
-        if type(data) == type(12) or type(data) == type(12.):
+        if type(data) in (type(12), type(12.)):
             # Can be added directly to the table
             data = str(float(data)).encode()
 
@@ -100,7 +105,6 @@ class Excel():
             if self.shared_strings_list and data in self.shared_strings_list:
                 member = True
                 index = self.shared_strings_list.index(data)
-
             else:
                 member = False
 
@@ -109,7 +113,6 @@ class Excel():
 
             if member:
                 shared_strings_i = index
-
             else:
                 shared_strings_i = self._add_to_shared_strings(data)
 
@@ -119,33 +122,41 @@ class Excel():
             self._add_data(data, row, column, sheet, _str=True)
 
     def add_formula(self, data):
+        """ Needs to be implemented. """
         pass
 
     def add_format(self):
+        """ Needs to be implemented. """
         pass
 
     def add_sheet(self):
+        """ Needs to be implemented. """
         pass
 
     def add_table(self):
+        """ Needs to be implemented. """
         pass
 
     def add_image(self):
+        """ Needs to be implemented. """
         pass
 
     def add_chart(self):
+        """ Needs to be implemented. """
         pass
     
     def save_excel(self):
-        self._save_excel(self._path)
+        """ Saves the file as .xlsx. """
+        self._save_excel(self._name)
 
     def save_excel_at(self, path, name=None):
-        self._save_excel(name or self._path, path=path)
+        """ Saves the file as .xlsx at given path. """
+        self._save_excel(name or self._name, path=path)
 
     def _create_new_empty_excel(self):
         """
         File Structure of Empty Excel (.xlsx 2019)
-        Excel_path/
+        Excel_Name/
             [Content_Types].xml
             _rels/
                 .rels
@@ -177,8 +188,7 @@ class Excel():
         #Encode the Strings
         empty_excel_contend_2019 = {n: v.encode() for n, v in empty_excel_contend_2019.items()}
 
-        tmp_path = '.'.join(self._path.split(".")[:-1])
-        with ZipFile(f"{tmp_path}.xlsx", mode="w", compression=ZIP_DEFLATED) as new_ZIP:
+        with ZipFile(f"{self._dir}/{self._name}.xlsx", mode="w", compression=ZIP_DEFLATED) as new_ZIP:
             for n, v in empty_excel_contend_2019.items():
                 new_ZIP.writestr(n, v)
 
@@ -188,26 +198,22 @@ class Excel():
         self.table_range = new_table_range
 
     def _add_to_shared_strings(self, data):
-        # Neede becouse Strings dont get added to the Excel Sheet directly
-        # They get stored ind a Shared Strings XML File
-        # Then they just get index Like a List starting from 0 int the Excel
-        # Its important to know that you need to add a self.sheet_1[4][row][column].attrib['t'] = "s"
-        # or it will not work (I handled this in self._add_data!)
         """
-        Still not working becouse of the table dimensions
-        need a dimension propperty to check if new data is outside and if so
-        extend all existing rows with the columns
+        Neede becouse Strings dont get added to the Excel Sheet directly.
+        They get stored ind a Shared Strings XML File and
+        then they just get index like a list starting from (0: int).
+        Its important to know that you need to add a self.sheet_1[4][row][column].attrib['t'] = "s"
+        or it will not work (I handled this in self._add_data!)
         """
 
         # Check if the Shared Strings File exists
-        if self.shared_strings is None: # IF File exists not
-            self.shared_strings = self._new_shared_strings()
+        if self.shared_strings is None: self.shared_strings = self._new_shared_strings()
 
         # Add ne Shared String Child
         child1 = etree.SubElement(self.shared_strings, "si")
         child2 = etree.SubElement(child1, "t")
         child2.text = data
-        self.shared_strings_list =  [v[0].text for v in self.shared_strings]
+        self.shared_strings_list = [v[0].text for v in self.shared_strings]
 
         return len(self.shared_strings) - 1
 
@@ -229,57 +235,71 @@ class Excel():
 
         return etree.fromstring(empty_shared_strings["xl/sharedStrings.xml"].encode())
 
-    def _update_data_shape(self, sheet_data, old_shape, new_shape):
+    def _get_column_name(self, index: int) -> str:
+        if index < 1:
+            raise ValueError("Index is too small")
+
+        ascii_uppercase = string.ascii_uppercase
+        ascii_uppercase_len = len(ascii_uppercase)
+
+        if index <= ascii_uppercase_len:
+            return ascii_uppercase[index - 1]
         
-        colum_path = string.ascii_uppercase
-        if old_shape[0] > new_shape[0]:
-            new_rows = 0
-        else:
-            new_rows = new_shape[0] + 1 - old_shape[0]
-        
-        if old_shape[1] > new_shape[1]:
-            new_columns = 0
-        else:
-            new_columns = new_shape[1] + 1 - old_shape[1]
+        result = ""
+        idx = index
+        while True:
+            if idx > ascii_uppercase_len:
+                idx, r = divmod(idx, ascii_uppercase_len)
+                result = "".join([ascii_uppercase[r - 1], result])
+            else:
+                return "".join([ascii_uppercase[idx - 1], result])
+
+
+    def _apply_shape(self, sheet_data: etree._Element, old_shape: list, new_shape: list):
+        """ Iterate over the Data Sheet and add new Rows and Columns """
+        # Check if there are rows in the Data
+        if old_shape == [0, 0]:
+            # Add first Row
+            row_name, tmp_row = f"{1}", etree.SubElement(sheet_data, "row")
+            tmp_row.attrib["r"] = row_name
+            
+            # Add first Column
+            column = etree.SubElement(tmp_row, "c")
+            column.attrib["r"] = f"{self._get_column_name(1)}{row_name}"
+            
+            old_shape = [1, 1]
+
+        for i in range(new_shape[0]):
+            # Add new row if outside old shape
+            row_name = f"{i+1}"
+            if i >= old_shape[0]:
+                tmp_row = etree.SubElement(sheet_data, "row")
+                tmp_row.attrib["r"] = row_name
+            else:
+                tmp_row = sheet_data[i]
+
+            # Important iterate over every Row and Column!
+            for ii in range(new_shape[1]):
+                # Add new column if outside old shape
+                if ii >= old_shape[1] or i >= old_shape[0]:
+                    column = etree.SubElement(tmp_row, "c")
+                    column.attrib["r"] = f"{self._get_column_name(ii+1)}{row_name}"
+
+        return sheet_data, new_shape
+
+    def _update_data_shape(self, sheet_data, old_shape, new_shape) -> tuple[etree._Element, list]:
+        """ Updates the shape of the sheet_data """
+        new_rows = 0 if old_shape[0] > new_shape[0] else new_shape[0] + 1 - old_shape[0]
+        new_columns = 0 if old_shape[1] > new_shape[1] else new_shape[1] + 1 - old_shape[1]
         new_shape = [max([old_shape[0] + new_rows, new_shape[0]]), max([old_shape[1] + new_columns, new_shape[1]])]
 
-        # Iterate over the Data Sheet and add new Rows and Columns
         if new_columns or new_rows:
-            # Check if there are rows in the Data
-            if old_shape == [0, 0]:
-                # Add first Row
-                row_path = f"{1}"
-                tmp_row = etree.SubElement(sheet_data, "row")
-                tmp_row.attrib["r"] = row_path
-                
-                # Add first Column
-                column = etree.SubElement(tmp_row, "c")
-                column.attrib["r"] = f"{colum_path[0]}{row_path}"
-                old_shape = [1, 1]
+            sheet_data, new_shape = self._apply_shape(sheet_data, old_shape, new_shape)
 
-            for i in range(new_shape[0]):
-                # Add new row if outside old shape
-                row_path = f"{i+1}"
-                if i >= old_shape[0]:
-                    row_path = f"{i+1}"
-                    tmp_row = etree.SubElement(sheet_data, "row")
-                    tmp_row.attrib["r"] = row_path
-                    # tmp_row.attrib["spans"] = "2:2"
-                else:
-                    tmp_row = sheet_data[i]
-
-                # Important iterate over every Row and Column!
-                for ii in range(new_shape[1]):
-                    # Add new column if outside old shape
-                    if ii >= old_shape[1] or i >= old_shape[0]:
-                        column = etree.SubElement(tmp_row, "c")
-                        column.attrib["r"] = f"{colum_path[ii]}{row_path}"
- 
         return sheet_data, new_shape
 
     def _add_data(self, data, row, column, sheet, _str=False, table=None):
-        """ Rows start with 1, 2, 3... | Colums starting from A, B, C... """
-        colum_path = string.ascii_uppercase
+        """ Rows and Colums start with 1, 2, 3... """
         tmp_sheet = self.sheets[sheet]["sheet"]
         tmp_sheet_data = self.sheets[sheet]["data"]
         tmp_sheet_data_index = self.sheets[sheet]["index"]
@@ -293,23 +313,23 @@ class Excel():
         tmp_sheet_data, new_shape = self._update_data_shape(tmp_sheet_data, data_shape, insert_shape)
 
         # Update Dimensions of Sheet and Active Cell
-        tmp_sheet[0].attrib["ref"] = f"{colum_path[new_shape[1]-1]}{new_shape[0]}" # Dimensions of Sheet
+        tmp_sheet[0].attrib["ref"] = f"{self._get_column_name(new_shape[1]-1)}{new_shape[0]}" # Dimensions of Sheet
 
         # Add active cell
         if not len(list(tmp_sheet[1][0])):
             view = etree.SubElement(tmp_sheet[1][0], "selection")
-            view.attrib["activeCell"] = f"{colum_path[column]}{row+1}" # Active Cell 
-            view.attrib["sqref"] = f"{colum_path[column]}{row+1}" # Active Cell
+            view.attrib["activeCell"] = f"{self._get_column_name(column)}{row+1}" # Active Cell 
+            view.attrib["sqref"] = f"{self._get_column_name(column)}{row+1}" # Active Cell
         else:
-            tmp_sheet[1][0][0].attrib["activeCell"] = f"{colum_path[column]}{row+1}" # Active Cell 
-            tmp_sheet[1][0][0].attrib["sqref"] = f"{colum_path[column]}{row+1}" # Active Cell
+            tmp_sheet[1][0][0].attrib["activeCell"] = f"{self._get_column_name(column)}{row}" # Active Cell 
+            tmp_sheet[1][0][0].attrib["sqref"] = f"{self._get_column_name(column)}{row}" # Active Cell
 
-        # print(etree.tostring(tmp_sheet_data, pretty_print=True).decode())
+        if self._debug: print(etree.tostring(tmp_sheet_data, pretty_print=True).decode())
 
-        root = tmp_sheet_data[row][column]
+        root = tmp_sheet_data[row - 1][column - 1]
 
         # Update new Table Size
-        if table: self._update_table_range(f"A1:{colum_path[new_shape[1]-1]}{new_shape[0]}")
+        if table: self._update_table_range(f"A1:{self._get_column_name(new_shape[1])}{new_shape[0]}")
 
         # Check if there is a existing value, if so replace text and dont create new Sub Element
         if len(root):
@@ -357,7 +377,7 @@ class Excel():
 
     def _save_excel(self, name, _dir=None, path=None):
         # Get dir to save to
-        _dir = _dir or '.'.join(self._path.split(".")[:-1])
+        _dir = _dir or self._dir
 
         self._save_excel_memory()
 
@@ -371,25 +391,51 @@ class Excel():
                 for n, v in self.excel_contend.items():
                     new.writestr(n, v)
 
-        if self._DEBUG: print("* Saved Excel")
+        if self._debug: print("* Saved Excel")
+
+class Excel_Hack(Excel):
+    """
+    I'm not so sure what this class was written for anymore.
+    Probably to extract data from another one, but I need to revise and extend everything again!
+    """
+    def __init__(self, name, dir=None, header_size=1, data_row=1, debug=False, empty=False):
+        """
+        header_size = 1 | Defines the Header Size in Rows
+        data_row = 1    | Defines the Row number after the header were the sample row get copied
+        """
+        """ Not tested! Tables shouldnt work like before """
+        super().__init__(name, dir=dir, debug=debug, empty=empty)
+
+        # Load the Excel Contend
+        self._header_size = header_size
+        self._data_row_index = data_row
+
+        # Opens the first Sheet of the Excel
+        self.sheet = etree.fromstring(self.excel_contend["xl/worksheets/sheet1.xml"])
+        self.sheet_data = etree.fromstring(etree.tostring(self.sheet[4])) # Needs to be changed, if the Data is not the 5th Element!!!
+        """ Need to change self._add_data to add it to the data row and not to the sheet, so i can allways start index with 0, 0! """
+        self.sheet_data_header = etree.fromstring(etree.tostring(self.sheet_data[self._header_size])) # What happens if header = 0? # Wouldnt it be better to create Child Class with these functions?
+        self.sheet_data_row = etree.fromstring(etree.tostring(self.sheet_data[self._header_size + self._data_row_index - 1])) # Here too?
+        if self.tables: self.table = self.tables[0]
 
 
 if __name__ == "__main__":
     print("* Starting Test")
-    filename = f"{_work_dir}/Test.xlsx"
+    _DIR = os.path.join(_DIR, "test_output")
+    if not os.path.exists(_DIR): os.mkdir(_DIR)
 
     print("* Creating Empty Test File")
-    test = Excel(filename, empty=True)
+    test = Excel("Test", empty=True)
 
     print("* Adding Data to Test File")
-    test.add_data("This", 0, 0, 0)
-    test.add_data("is", 1, 1, 0)
-    test.add_data("a", 2, 2, 0)
-    test.add_data("awesome", 3, 3, 0)
-    test.add_data("Test", 3, 3, 0)
+    test.add_data("This", 1, 1, 0)
+    test.add_data("is", 2, 2, 0)
+    test.add_data("a", 3, 3, 0)
+    test.add_data("awesome", 4, 4, 0)
+    test.add_data("Test", 5, 5, 0)
 
     print("* Save Test File as Excel")
-    test.save_excel_at(filename)
+    test.save_excel_at(f"{_DIR}/Test.xlsx")
 
     print("* Save Test File as Folder")
     test.save_as_folder()
