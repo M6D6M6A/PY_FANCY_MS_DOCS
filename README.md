@@ -12,7 +12,6 @@
 py_fancy_excel provides one application programming interface to read, manipulate and write data in .xlsx excel formats (Maybe other too, idc). 
 This library makes information processing involving excel files an enjoyable task.
 The original library focuses on data processing using excel files as storage media hence fonts, colors and charts were not and will not be considered.
-> To me, they're much more...
 
 So I went a different way and extract the file as a zip file to memory.
 You can insert data with row and column into a fully formatted Excel and the file keeps all formatting from the original.
