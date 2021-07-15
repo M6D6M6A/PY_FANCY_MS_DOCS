@@ -1,6 +1,6 @@
-# pyfancyexcel
+# py_fancy_excel
 
-## pyfancyexcel	- Let you focus on data AND file formats
+## py_fancy_excel	- Let you focus on data AND file formats
 
 - Author:		      Philipp Reuter
 - Version:      	1.0.0
@@ -9,7 +9,7 @@
 
 
 ### Introduction
-pyfancyexcel provides one application programming interface to read, manipulate and write data in .xlsx excel formats (Maybe other too, idc). 
+py_fancy_excel provides one application programming interface to read, manipulate and write data in .xlsx excel formats (Maybe other too, idc). 
 This library makes information processing involving excel files an enjoyable task.
 The original library focuses on data processing using excel files as storage media hence fonts, colors and charts were not and will not be considered.
 > To me, they're much more...
@@ -21,7 +21,7 @@ You want to automatically insert data into an Excel, but pandas and pyexcel dest
 
 
 ### How to use
-> `from pyfancyexcel import Excel`
+> `from py_fancy_excel import Excel`
 
 > `excel_file = Excel("Path/to/File")` To create / override with empty Excel, add empty=True
 
