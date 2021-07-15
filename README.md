@@ -43,7 +43,8 @@ You want to automatically insert data into an Excel, but pandas and pyexcel dest
 - [ ] Clone / Add / Create Tables
 - [ ] Insert formulas
 - [ ] Edit Font, Colors & Borders
-- [ ] Improfing Code Qualtity and Speed
+- [ ] Improving Code Qualtity and Speed
+- [ ] Improve the ease of use
 
 ###### Would be nice
 - [ ] Image support
