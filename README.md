@@ -34,7 +34,7 @@ You want to automatically insert data into an Excel, but pandas and pyexcel dest
 > `excel_file.save_as_json()` # Extracts the Excel file to Json to see Excel File Contents, like they are stored in the Excel() class
 
 
-### Planned Features
+### Planned Features (not ordered)
 - [ ] Port for all Microsoft Word Document Types
 - [ ] Editing the Format in Python
 - [ ] Clone / Add Sheets
