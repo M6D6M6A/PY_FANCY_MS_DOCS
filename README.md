@@ -23,7 +23,7 @@ You want to automatically insert data into an Excel, but pandas and pyexcel dest
 ### How to use
 > `from py_fancy_ms_docs.py_fancy_excel import Excel`
 
-> `excel_file = Excel("Path/to/File")` To create / override with empty Excel, add empty=True
+> `excel_file = Excel("Path/to/File")` To create or override with empty Excel, add `empty=True`
 
 > `excel_file.add_data("Test", 1, 1, 1)` (data, row_index, column_index, sheet_index)
 >   > row_index, column_index and sheet_index range from 1, 2, ...
