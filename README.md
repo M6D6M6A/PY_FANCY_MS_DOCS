@@ -47,3 +47,4 @@ You want to automatically insert data into an Excel, but pandas and pyexcel dest
 - [ ] Improve the ease of use
 - [ ] Image support
 - [ ] Plots and Charts
+- [ ] Add Classes for everything with `__str__` method
