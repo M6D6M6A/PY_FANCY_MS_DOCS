@@ -18,6 +18,14 @@ XL__RELS_WORKBOOK_XML_RELS = "xl/_rels/workbook.xml.rels"
 _CONTENT_TYPES__XML = "[Content_Types].xml"
 
 
+class test_attribute:
+    def __init__(self):
+        self.name = "test"
+        self.version = "001"
+
+    def __str__(self) -> str:
+        return f"<!{self.name} | {self.version}>"
+
 class excel_file():
     def __init__(self, name, dir=None, debug=False, empty=False):
         """
@@ -395,27 +403,28 @@ class excel_file():
 
 
 if __name__ == "__main__":
-    print("* Starting Test")
-    _DIR = os.path.join(_DIR, "test_output")
-    if not os.path.exists(_DIR): os.mkdir(_DIR)
+    # print("* Starting Test")
+    # _DIR = os.path.join(_DIR, "test_output")
+    # if not os.path.exists(_DIR): os.mkdir(_DIR)
 
-    print("* Creating Empty Test File")
-    test = excel_file("Test", empty=True)
+    # print("* Creating Empty Test File")
+    # test = excel_file("Test", empty=True)
 
-    print("* Adding Data to Test File")
-    test.add_data("This", 1, 1, 1)
-    test.add_data("is", 2, 2, 1)
-    test.add_data("a", 3, 3, 1)
-    test.add_data("awesome", 4, 4, 1)
-    test.add_data("Test", 5, 5, 1)
+    # print("* Adding Data to Test File")
+    # test.add_data("This", 1, 1, 1)
+    # test.add_data("is", 2, 2, 1)
+    # test.add_data("a", 3, 3, 1)
+    # test.add_data("awesome", 4, 4, 1)
+    # test.add_data("Test", 5, 5, 1)
 
-    print("* Save Test File as Excel")
-    test.save_excel_at(f"{_DIR}/Test.xlsx")
+    # print("* Save Test File as Excel")
+    # test.save_excel_at(f"{_DIR}/Test.xlsx")
 
-    print("* Save Test File as Folder")
-    test.save_as_folder()
+    # print("* Save Test File as Folder")
+    # test.save_as_folder()
 
-    print("* Save Test File as Json")
-    test.save_as_json()
+    # print("* Save Test File as Json")
+    # test.save_as_json()
 
-    print("* Finished Test with no Errors")
+    # print("* Finished Test with no Errors")
+    print(str(test_attribute()))
