@@ -37,7 +37,7 @@ You want to automatically insert data into an Excel, but pandas and pyexcel dest
 
 
 ### Planned Features (not ordered)
-- [ ] Port for all Microsoft Word Document Types
+- [ ] Port for all MS Document Types
 - [ ] Editing the Format in Python
 - [ ] Clone / Add Sheets
 - [ ] Clone / Add / Create Tables
