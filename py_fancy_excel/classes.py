@@ -13,7 +13,7 @@ elif __file__:
     _DIR = os.path.dirname(__file__)
 
 
-class Excel():
+class excel_file():
     def __init__(self, name, dir=None, debug=False, empty=False):
         """
         name                                    | File Name without extension
@@ -388,7 +388,7 @@ class Excel():
 
         if self._debug: print("* Saved Excel")
 
-class Excel_Hack(Excel):
+class excel_file_hack(excel_file):
     """
     I'm not so sure what this class was written for anymore.
     Probably to extract data from another one, but I need to revise and extend everything again!
@@ -420,7 +420,7 @@ if __name__ == "__main__":
     if not os.path.exists(_DIR): os.mkdir(_DIR)
 
     print("* Creating Empty Test File")
-    test = Excel("Test", empty=True)
+    test = excel_file("Test", empty=True)
 
     print("* Adding Data to Test File")
     test.add_data("This", 1, 1, 1)
