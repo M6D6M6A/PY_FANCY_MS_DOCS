@@ -21,19 +21,19 @@ You want to automatically insert data into an Excel, but pandas and pyexcel dest
 
 
 ### How to use
-> `from py_fancy_ms_docs.py_fancy_excel import Excel`
+> `from py_fancy_ms_docs.py_fancy_excel import excel_file`
 
-> `excel_file = Excel("Path/to/File")` To create or override with empty Excel, add `empty=True`
+> `excel = excel_file("Path/to/File")` To create or override with empty Excel, add `empty=True`
 
-> `excel_file.add_data("Test", 1, 1, 1)` (data, row_index, column_index, sheet_index)
+> `excel.add_data("Test", 1, 1, 1)` (data, row_index, column_index, sheet_index)
 >   > row_index, column_index and sheet_index range from 1, 2, ...
 
-> `excel_file.save_excel(path="Path/to/new/File.xlsx")` Save the edited Excel as file (Feel free to test different file extensions, .zip works!)
+> `excel.save_excel(path="Path/to/new/File.xlsx")` Save the edited Excel as file (Feel free to test different file extensions, .zip works!)
 
 ### Extra Features
-> `excel_file.save_as_folder()` # Extracts the Excel file to Folder to see Excel File Contents
+> `excel.save_as_folder()` # Extracts the Excel file to Folder to see Excel File Contents
 
-> `excel_file.save_as_json()` # Extracts the Excel file to Json to see Excel File Contents, like they are stored in the Excel() class
+> `excel.save_as_json()` # Extracts the Excel file to Json to see Excel File Contents, like they are stored in the Excel() class
 
 
 ### Planned Features (not ordered)
