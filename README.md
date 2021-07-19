@@ -26,7 +26,7 @@ You want to automatically insert data into an Excel, but pandas and pyexcel dest
 > `excel = excel_file("Path/to/File")` To create or override with empty Excel, add `empty=True`
 
 > `excel.add_data("Test", 1, 1, 1)` (data, row_index, column_index, sheet_index)
->   > row_index, column_index and sheet_index range from 1, 2, ...
+>   > row_index, column_index and sheet_index range is 1, 2, ...
 
 > `excel.save_excel(path="Path/to/new/File.xlsx")` Save the edited Excel as file (Feel free to test different file extensions, .zip works!)
 
