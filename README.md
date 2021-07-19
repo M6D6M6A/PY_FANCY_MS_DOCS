@@ -5,7 +5,7 @@
 - Author:		      Philipp Reuter
 - Version:      	1.0.0
 - Generated:    	May 16, 2020
-- Last Update:    	Jul 18, 2021
+- Last Update:    	Jul 20, 2021
 - Idea based on:	http://docs.pyexcel.org/en/latest/
 
 
