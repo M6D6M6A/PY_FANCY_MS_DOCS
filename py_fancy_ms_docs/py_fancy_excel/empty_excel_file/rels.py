@@ -14,7 +14,7 @@ class rel:
 
     def __str__(self) -> str:
         """ Get the Element string of Relationships Element """
-        return tostring(self.tree, encoding="UTF-8").decode("utf-8")
+        return tostring(self.tree, encoding="UTF-8").decode("UTF-8")
 
     def from_str(self, xml_str: str) -> None:
         """ Parse a string to Relationship Element """
@@ -54,7 +54,7 @@ class rels:
 
     def __str__(self) -> str:
         """ Get the Element string of Relationships Element """
-        return tostring(self.tree, encoding="UTF-8").decode("utf-8")
+        return tostring(self.tree, encoding="UTF-8").decode("UTF-8")
 
     def _get_tree(self) -> Element:
         """ Private method to get the Element tree of Relationships Element from self """
