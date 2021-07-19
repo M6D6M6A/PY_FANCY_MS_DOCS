@@ -31,9 +31,9 @@ You want to automatically insert data into an Excel, but pandas and pyexcel dest
 > `excel.save_excel(path="Path/to/new/File.xlsx")` Save the edited Excel as file (Feel free to test different file extensions, .zip works!)
 
 ### Extra Features
-> `excel.save_as_folder()` # Extracts the Excel file to Folder to see Excel File Contents
+> `excel.save_as_folder()` Extracts the Excel file to Folder to see Excel File Contents
 
-> `excel.save_as_json()` # Extracts the Excel file to Json to see Excel File Contents, like they are stored in the Excel() class
+> `excel.save_as_json()` Extracts the Excel file to Json to see Excel File Contents, like they are stored in the Excel() class
 
 
 ### Planned Features (not ordered)
