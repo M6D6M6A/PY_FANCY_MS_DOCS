@@ -1,1 +1,1 @@
-from . import py_fancy_excel, py_fancy_word, tests
+from . import py_fancy_excel, py_fancy_word

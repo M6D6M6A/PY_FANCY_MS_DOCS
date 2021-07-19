@@ -11,7 +11,7 @@ from zipfile import ZipFile, ZIP_DEFLATED
 from lxml import etree
 
 # Module files
-from .empty_excel import empty_excel_file
+from .empty_excel_file import empty_excel_file
 
 # Determine if Application is a Python Script or a complied .exe and define global _DIR
 if getattr(sys, 'frozen', False):
