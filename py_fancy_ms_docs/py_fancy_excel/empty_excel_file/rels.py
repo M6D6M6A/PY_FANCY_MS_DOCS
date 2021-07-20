@@ -38,7 +38,7 @@ class rel:
         return tree
 
     def get_tree(self) -> Element:
-        """ Get the Element tree of Relationship Element """
+        """ Get the Element tree of the Relationship Element """
         return self.tree
 
 
@@ -47,7 +47,7 @@ class rels:
 
     def __init__(self, rel_list: list = None, xmlns: str = "") -> None:
         self.xmlns = xmlns or "http://schemas.openxmlformats.org/package/2006/relationships"
-        self.rel_list = rel_list if rel_list else []
+        self.rel_list = rel_list or []
         self.tree = self._get_tree()
 
     def __str__(self) -> str:
@@ -63,5 +63,5 @@ class rels:
         return tree
 
     def get_tree(self) -> Element:
-        """ Get the Element tree of Relationships Element """
+        """ Get the Element tree of the Relationships Element """
         return self.tree

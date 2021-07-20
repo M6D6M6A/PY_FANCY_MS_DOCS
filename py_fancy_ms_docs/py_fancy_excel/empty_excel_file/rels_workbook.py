@@ -28,7 +28,7 @@ class rels_workbook:
         self.encoding: str = encoding
         self.standalone: str = standalone
         self.key: str = key
-        self.rel_list = rel_list if rel_list else [r_id_3, r_id_2, r_id_1]
+        self.rel_list: list = rel_list or [r_id_3, r_id_2, r_id_1]
 
         self.rels: rels = rels(rel_list=self.rel_list)
         self.tree: Element = self.rels.get_tree()
