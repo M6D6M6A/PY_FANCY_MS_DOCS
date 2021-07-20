@@ -1,6 +1,4 @@
-# import xml.etree.ElementTree as ET
-# from xml.etree.ElementTree import Element, tostring
-from lxml.etree import Element, tostring
+from lxml.etree import Element, tostring, fromstring
 
 
 class rel:
@@ -18,7 +16,7 @@ class rel:
 
     def from_str(self, xml_str: str) -> None:
         """ Parse a string to Relationship Element """
-        tree: Element = ET.fromstring(xml_str)
+        tree: Element = fromstring(xml_str)
         self.id: str = tree.attrib.get("Id") or ""
         self.type: str = tree.attrib.get("Type") or ""
         self.target: str = tree.attrib.get("Target") or ""
