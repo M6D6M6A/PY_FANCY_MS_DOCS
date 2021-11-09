@@ -5,7 +5,7 @@ class _rels:
     """
     Just Copied!
     Representing "xl/_rels/workbook.xml.rels" in a empty excel file.
-    
+
     Reslt of self.get_dict(), but the result will not be formatted like this:
         {"xl/_rels/workbook.xml.rels": "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?>\r\n
             <Relationships xmlns=\"http://schemas.openxmlformats.org/package/2006/relationships\">
@@ -23,15 +23,15 @@ class _rels:
         self.rel_list = rel_list or [
             rel("rId3", "http://schemas.openxmlformats.org/officeDocument/2006/relationships/styles", "styles.xml"),
             rel("rId2", "http://schemas.openxmlformats.org/officeDocument/2006/relationships/theme", "theme/theme1.xml"),
-            rel("rId1", "http://schemas.openxmlformats.org/officeDocument/2006/relationships/worksheet", "worksheets/sheet1.xml")
+            rel("rId1", "http://schemas.openxmlformats.org/officeDocument/2006/relationships/worksheet",
+                "worksheets/sheet1.xml")
         ]
 
-        self.relationships = rels(rel_list=rel_list)
-        self.dict = self._get_dict()
+        self.relationships = rels(rel_list=self.rel_list)
 
-    def _get_str(self):
+    def __str__(self):
         str_rels_workbook = f"<?xml version=\"{self.version}\" encoding=\"{self.encoding}\" standalone=\"{self.standalone}\"?>\r\n"
         return "".join([str_rels_workbook, str(self.relationships)])
 
-    def _get_dict(self):
+    def __dict__(self):
         return {self.key: self._get_str()}
